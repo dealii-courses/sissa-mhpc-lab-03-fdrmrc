@@ -1,0 +1,124 @@
+{
+  "tests": [
+    {
+      "name": "Step3 - Ex3",
+      "setup": "",
+      "run": "test -f figures/step-3-0.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Step3 - Ex4",
+      "setup": "",
+      "run": "test -f figures/step-3-1.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Step3 - Ex5",
+      "setup": "",
+      "run": "test -f figures/step-3-2.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Step3 - Ex6",
+      "setup": "",
+      "run": "test -f figures/step-3-3.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Step3 - Ex7",
+      "setup": "",
+      "run": "test -f figures/step-3-4.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Parameters - HyperBall",
+      "setup": "",
+      "run": "test -f figures/hyper_ball.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Parameters - HyperCube",
+      "setup": "",
+      "run": "test -f figures/hyper_cube.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Parameters - HyperShell",
+      "setup": "",
+      "run": "test -f figures/hyper_shell.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Parameters - SinBc",
+      "setup": "",
+      "run": "test -f figures/sin_bc.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Parameters - SinRhs",
+      "setup": "",
+      "run": "test -f figures/sin_rhs.png",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Build code",
+      "setup": "",
+      "run": ".scripts/dr.sh \"mkdir build; cd build; cmake -GNinja ..; ninja;\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Run tests",
+      "setup": "",
+      "run": ".scripts/dr.sh \"cd build; ctest -N; ctest --output-on-failure\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    }
+  ]
+}
