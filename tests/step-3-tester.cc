@@ -18,3 +18,22 @@ TEST_F(Step3Tester, MakeGrid)
 {
   make_grid();
 }
+
+TEST_F(Step3Tester, ModifyBoundaryConditions)
+{
+  modify_bdary_cond = true;
+  run();
+}
+
+TEST_F(Step3Tester, ModifyBoundaryData)
+{
+  modify_bdary_cond = true;
+  modify_bdary_data = true;
+  run();
+}
+
+TEST_F(Step3Tester, solve_laplace_equation)
+{
+  source_term = 0.0; // set source term f = 0
+  run();
+}

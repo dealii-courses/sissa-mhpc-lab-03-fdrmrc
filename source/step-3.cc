@@ -17,12 +17,31 @@
  *          Guido Kanschat, 2011
  *          Luca Heltai, 2021
  */
+
 #include "step-3.h"
+
+#include <deal.II/base/function.h>
+#include <deal.II/base/quadrature_lib.h>
+
+#include <deal.II/fe/fe_values.h>
+
+#include <deal.II/grid/grid_generator.h>
+
+#include <deal.II/lac/full_matrix.h>
+#include <deal.II/lac/precondition.h>
+#include <deal.II/lac/solver_cg.h>
+
+#include <deal.II/numerics/data_out.h>
+#include <deal.II/numerics/matrix_tools.h>
+#include <deal.II/numerics/vector_tools.h>
 
 using namespace dealii;
 
 Step3::Step3()
-  : fe(1)
+  : modify_bdary_cond{false}
+  , modify_bdary_data{false}
+  , source_term{1.0} // default value for source term is 1
+  , fe(1)
   , dof_handler(triangulation)
 {}
 
@@ -32,6 +51,12 @@ void
 Step3::make_grid()
 {
   GridGenerator::hyper_cube(triangulation, -1, 1);
+
+  if (modify_bdary_cond)
+    {
+      triangulation.begin_active()->face(0)->set_boundary_id(
+        1); // set a face with a bdary indicator = 1
+    }
   triangulation.refine_global(5);
   std::cout << "Number of active cells: " << triangulation.n_active_cells()
             << std::endl;
@@ -81,7 +106,7 @@ Step3::assemble_system()
                  fe_values.JxW(q_index));           // dx
           for (const unsigned int i : fe_values.dof_indices())
             cell_rhs(i) += (fe_values.shape_value(i, q_index) * // phi_i(x_q)
-                            1. *                                // f(x_q)
+                            source_term *                       // f(x_q)
                             fe_values.JxW(q_index));            // dx
         }
       cell->get_dof_indices(local_dof_indices);
@@ -96,8 +121,14 @@ Step3::assemble_system()
   std::map<types::global_dof_index, double> boundary_values;
   VectorTools::interpolate_boundary_values(dof_handler,
                                            0,
-                                           Functions::ZeroFunction<2>(),
+                                           Functions::ConstantFunction<2>(0.0),
                                            boundary_values);
+
+  if (modify_bdary_data && modify_bdary_cond)
+    {
+      VectorTools::interpolate_boundary_values(
+        dof_handler, 1, Functions::ConstantFunction<2>(-1.0), boundary_values);
+    }
   MatrixTools::apply_boundary_values(boundary_values,
                                      system_matrix,
                                      solution,
