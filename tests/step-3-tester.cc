@@ -14,26 +14,32 @@ public:
 };
 
 
-TEST_F(Step3Tester, MakeGrid)
+TEST_F(Step3Tester, Ex3)
 {
   make_grid();
 }
 
-TEST_F(Step3Tester, ModifyBoundaryConditions)
+TEST_F(Step3Tester, Ex4)
 {
   modify_bdary_cond = true;
   run();
 }
 
-TEST_F(Step3Tester, ModifyBoundaryData)
+TEST_F(Step3Tester, Ex5)
 {
   modify_bdary_cond = true;
   modify_bdary_data = true;
   run();
 }
 
-TEST_F(Step3Tester, solve_laplace_equation)
+TEST_F(Step3Tester, Ex6)
 {
   source_term = 0.0; // set source term f = 0
+  run();
+}
+
+TEST_F(Step3Tester, Ex7)
+{
+  l_shaped = true; // solve over L-shaped domain
   run();
 }

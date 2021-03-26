@@ -48,6 +48,7 @@ public:
   Step3();
   void
   run();
+  bool   l_shaped;
   bool modify_bdary_cond;
   bool modify_bdary_data;
   double source_term; //value for the constant source term 

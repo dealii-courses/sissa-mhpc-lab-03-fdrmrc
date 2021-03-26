@@ -38,7 +38,8 @@
 using namespace dealii;
 
 Step3::Step3()
-  : modify_bdary_cond{false}
+  : l_shaped{true}
+  , modify_bdary_cond{false}
   , modify_bdary_data{false}
   , source_term{1.0} // default value for source term is 1
   , fe(1)
@@ -50,13 +51,22 @@ Step3::Step3()
 void
 Step3::make_grid()
 {
-  GridGenerator::hyper_cube(triangulation, -1, 1);
-
-  if (modify_bdary_cond)
+  if (l_shaped)
     {
-      triangulation.begin_active()->face(0)->set_boundary_id(
-        1); // set a face with a bdary indicator = 1
+      GridGenerator::hyper_L(triangulation, -1.0, 1.0, true);
     }
+  else
+    {
+      GridGenerator::hyper_cube(triangulation, -1.0, 1.0);
+      if (modify_bdary_cond)
+        {
+          (triangulation.begin_active())
+            ->face(0)
+            ->set_boundary_id(1); // set a face with a bdary indicator = 1
+        }
+    }
+
+
   triangulation.refine_global(5);
   std::cout << "Number of active cells: " << triangulation.n_active_cells()
             << std::endl;
@@ -121,13 +131,23 @@ Step3::assemble_system()
   std::map<types::global_dof_index, double> boundary_values;
   VectorTools::interpolate_boundary_values(dof_handler,
                                            0,
-                                           Functions::ConstantFunction<2>(0.0),
+                                           Functions::ConstantFunction<2>(1.0),
                                            boundary_values);
 
-  if (modify_bdary_data && modify_bdary_cond)
+  if (modify_bdary_data && modify_bdary_cond && l_shaped)
+    {
+      // VectorTools::interpolate_boundary_values(
+      //   dof_handler, 2, Functions::ConstantFunction<2>(1.0),
+      //   boundary_values); //used to test bdary indicators
+      VectorTools::interpolate_boundary_values(
+        dof_handler, 3, Functions::ConstantFunction<2>(2.0), boundary_values);
+      VectorTools::interpolate_boundary_values(
+        dof_handler, 4, Functions::ConstantFunction<2>(3.0), boundary_values);
+    }
+  else if (modify_bdary_cond && modify_bdary_data)
     {
       VectorTools::interpolate_boundary_values(
-        dof_handler, 1, Functions::ConstantFunction<2>(-1.0), boundary_values);
+        dof_handler, 0, Functions::ConstantFunction<2>(1.0), boundary_values);
     }
   MatrixTools::apply_boundary_values(boundary_values,
                                      system_matrix,
