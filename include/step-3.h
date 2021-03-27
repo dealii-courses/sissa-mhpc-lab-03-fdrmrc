@@ -51,7 +51,10 @@ public:
   bool   l_shaped;
   bool modify_bdary_cond;
   bool modify_bdary_data;
-  double source_term; //value for the constant source term 
+  double source_term; //value for the constant source term
+  unsigned int n_global_refs;
+
+
 
 protected:
   void
@@ -65,6 +68,7 @@ protected:
   void
   output_results() const;
 
+
   Triangulation<2>     triangulation;
   FE_Q<2>              fe;
   DoFHandler<2>        dof_handler;
@@ -72,7 +76,6 @@ protected:
   SparseMatrix<double> system_matrix;
   Vector<double>       solution;
   Vector<double>       system_rhs;
-
   friend class Step3Tester;
 };
 
