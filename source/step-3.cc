@@ -43,7 +43,7 @@ Step3::Step3()
   , modify_bdary_data{false}
   , source_term{1.0} // default value for source term is 1
   , n_global_refs{5}
-  , fe(1)
+  , fe(2)
   , dof_handler(triangulation)
 {}
 
@@ -94,7 +94,7 @@ Step3::setup_system()
 void
 Step3::assemble_system()
 {
-  QGauss<2>          quadrature_formula(fe.degree + 1);
+  QGauss<2>                            quadrature_formula(2 * fe.degree + 1);
   FEValues<2>        fe_values(fe,
                         quadrature_formula,
                         update_values | update_gradients | update_JxW_values);
@@ -130,24 +130,24 @@ Step3::assemble_system()
         system_rhs(local_dof_indices[i]) += cell_rhs(i);
     }
   std::map<types::global_dof_index, double> boundary_values;
-  VectorTools::interpolate_boundary_values(dof_handler,
-                                           0,
-                                           Functions::ConstantFunction<2>(0.0),
-                                           boundary_values);
+  // VectorTools::interpolate_boundary_values(dof_handler,
+  //                                          0,
+  //                                          Functions::ConstantFunction<2>(1.0),
+  //                                          boundary_values);
 
   if (modify_bdary_data && modify_bdary_cond && l_shaped)
     {
-      VectorTools::interpolate_boundary_values(
-        dof_handler,
-        1,
-        Functions::ConstantFunction<2>(0.0),
-        boundary_values); // used to test bdary indicators
+      // VectorTools::interpolate_boundary_values(
+      //   dof_handler,
+      //   1,
+      //   Functions::ConstantFunction<2>(0.0),
+      //   boundary_values); // used to test bdary indicators
 
-      VectorTools::interpolate_boundary_values(
-        dof_handler,
-        2,
-        Functions::ConstantFunction<2>(0.0),
-        boundary_values); // used to test bdary indicators
+      // VectorTools::interpolate_boundary_values(
+      //   dof_handler,
+      //   2,
+      //   Functions::ConstantFunction<2>(0.0),
+      //   boundary_values); // used to test bdary indicators
 
       VectorTools::interpolate_boundary_values(
         dof_handler, 3, Functions::ConstantFunction<2>(0.0), boundary_values);
@@ -155,13 +155,14 @@ Step3::assemble_system()
       VectorTools::interpolate_boundary_values(
         dof_handler, 4, Functions::ConstantFunction<2>(0.0), boundary_values);
 
-      VectorTools::interpolate_boundary_values(
-        dof_handler, 5, Functions::ConstantFunction<2>(0.0), boundary_values);
+      // VectorTools::interpolate_boundary_values(
+      //   dof_handler, 5, Functions::ConstantFunction<2>(0.0),
+      //   boundary_values);
     }
   else if (modify_bdary_cond && modify_bdary_data)
     {
-      // VectorTools::interpolate_boundary_values(
-      // dof_handler, 0, Functions::ConstantFunction<2>(1.0), boundary_values);
+      VectorTools::interpolate_boundary_values(
+        dof_handler, 1, Functions::ConstantFunction<2>(-0.5), boundary_values);
     }
   MatrixTools::apply_boundary_values(boundary_values,
                                      system_matrix,
@@ -191,9 +192,10 @@ Step3::output_results() const
   std::ofstream output("solution.vtk");
   data_out.write_vtk(output);
 
+  std::cout.precision(16);
   std::cout << "Mean value: "
             << VectorTools::compute_mean_value(dof_handler,
-                                               QGauss<2>(fe.degree + 1),
+                                               QGauss<2>(2 * fe.degree + 1),
                                                solution,
                                                0)
             << std::endl;
