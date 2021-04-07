@@ -7,7 +7,7 @@
  * The deal.II library is free software; you can use it, redistribute
  * it, and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version../gt
  * The full text of the license can be found in the file LICENSE.md at
  * the top level directory of deal.II.
  *
@@ -22,28 +22,18 @@
 #ifndef step3_include_file
 #define step3_include_file
 
-#include <deal.II/base/function.h>
-#include <deal.II/base/quadrature_lib.h>
 
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_tools.h>
 
 #include <deal.II/fe/fe_q.h>
-#include <deal.II/fe/fe_values.h>
 
-#include <deal.II/grid/grid_generator.h>
 #include <deal.II/grid/tria.h>
 
 #include <deal.II/lac/dynamic_sparsity_pattern.h>
-#include <deal.II/lac/full_matrix.h>
-#include <deal.II/lac/precondition.h>
-#include <deal.II/lac/solver_cg.h>
 #include <deal.II/lac/sparse_matrix.h>
 #include <deal.II/lac/vector.h>
 
-#include <deal.II/numerics/data_out.h>
-#include <deal.II/numerics/matrix_tools.h>
-#include <deal.II/numerics/vector_tools.h>
 
 #include <fstream>
 #include <iostream>
@@ -58,6 +48,13 @@ public:
   Step3();
   void
   run();
+  bool   l_shaped;
+  bool modify_bdary_cond;
+  bool modify_bdary_data;
+  double source_term; //value for the constant source term
+  unsigned int n_global_refs;
+
+
 
 protected:
   void
@@ -71,6 +68,7 @@ protected:
   void
   output_results() const;
 
+
   Triangulation<2>     triangulation;
   FE_Q<2>              fe;
   DoFHandler<2>        dof_handler;
@@ -78,7 +76,6 @@ protected:
   SparseMatrix<double> system_matrix;
   Vector<double>       solution;
   Vector<double>       system_rhs;
-
   friend class Step3Tester;
 };
 

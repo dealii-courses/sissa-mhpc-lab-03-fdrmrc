@@ -74,9 +74,34 @@ extensible Finite Element codes.
 8.  Bonus: Do “Convergence of the mean” (read through the end of the 
     documentation of ). Can you see the order $h^2$?
     Increase the polynomial order (you need to increase all orders of
-    the quadratures in the program!) and check the convergence of the
-    mean now. Make sure the test is run through `gtest`.
+    the quadratures in the program!) and check the convergence of the mean now. Make sure the test is run through `gtest`.
 
+
+### Convergence of the mean for L-shaped domain:
+
+Using P1 basis functions, the difference between two consecutive measurements of the mean value is:
+0.03601745
+0.01159660
+0.00390877
+0.00137560
+0.000501716
+0.000188018
+
+with a decrease of a factor of roughly 3.0
+
+
+With quadratic basis functions I obtain:
+
+0.00328048
+0.00130720
+0.00051926
+0.00020614
+0.00008189
+0.00003247
+
+where the decrease factor is approximately 2.5
+
+  
 ### ParameterHandler
 
 1.  Follow the documentation of the class `ParameterAcceptor` 
